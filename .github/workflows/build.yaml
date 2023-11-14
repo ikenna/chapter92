@@ -121,7 +121,7 @@ jobs:
       - name: Deploy-and-Test - Reconcile API gateway state
         run: |
           deck validate --state chapter9/kong.yml
-          deck sync --state chapter9/kong.yml --kong-addr http://localhost:8001
+          deck sync --state chapter9/kong.yaml --kong-addr http://localhost:8001
       - name: Deploy-and-Test - Run API conformance tests
         run: |
           cd chapter8
