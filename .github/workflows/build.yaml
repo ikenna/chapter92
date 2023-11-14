@@ -120,7 +120,7 @@ jobs:
            docker compose -f chapter9/compose-api-service.yaml up -d
       - name: Deploy-and-Test - Reconcile API gateway state
         run: |
-          deck validate --state chapter9/kong.yml
+          deck validate --state chapter9/kong.yaml
           deck sync --state chapter9/kong.yaml --kong-addr http://localhost:8001
       - name: Deploy-and-Test - Run API conformance tests
         run: |
