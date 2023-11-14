@@ -103,7 +103,7 @@ jobs:
   deploy-and-test:
     name: Deploy and test
     needs: build
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Deploy Products API service
         run: |
@@ -112,6 +112,12 @@ jobs:
         run: |
           deck validate --state chapter9/kong.yml
           deck sync --state chapter9/kong.yml --kong-addr http://localhost:8001
+      - name: Install Kong Deck
+        run: |
+          curl -sL https://github.com/kong/deck/releases/download/v1.29.2/deck_1.29.2_linux_amd64.tar.gz -o deck.tar.gz
+          tar -xf deck.tar.gz -C /tmp
+          sudo cp /tmp/deck /usr/local/bin/
+          deck version
       - name: Run API conformance tests
         run: |
           cd chapter8
