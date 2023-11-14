@@ -109,6 +109,7 @@ jobs:
         run: |
           ls -la
           pwd
+          cat chapter9/compose-api-service.yaml
       - name: Install Kong Deck
         run: |
           curl -sL https://github.com/kong/deck/releases/download/v1.29.2/deck_1.29.2_linux_amd64.tar.gz -o deck.tar.gz
