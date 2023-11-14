@@ -102,7 +102,7 @@ jobs:
 
   deploy-and-test:
     name: Deploy and test
-    needs: build
+#    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Where am I
