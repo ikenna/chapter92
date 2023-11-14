@@ -96,7 +96,7 @@ jobs:
       - name: Publish SDK to GitHub Packages #TODO: ensure you uncomment distribution-management from chapter8/java-template/libraries/okhttp-gson/pom.mustache
         run: |
           cd build-output/java-client
-          mvn -X --batch-mode deploy
+          mvn --batch-mode deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
