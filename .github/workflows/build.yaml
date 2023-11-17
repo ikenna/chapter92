@@ -13,8 +13,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    outputs:
-      LATEST_ARTIFACT_VERSION: ${{ steps.artifact-version.outputs.ARTIFACT_VERSION }}
     steps:
       - name: Build - Checkout
         uses: actions/checkout@v3
@@ -117,11 +115,9 @@ jobs:
           cd chapter8
           ./run_integrationtest.sh
       - name: Deploy-and-Test - Mark API definition as passing API conformance testing
-        env:
-          LATEST_API_VERSION: ${{ needs.build.outputs.LATEST_ARTIFACT_VERSION }}
         run: |
           curl -X PUT \
-          http://localhost:9090/apis/registry/v2/groups/acmeapis/artifacts/productsapi/versions/$LATEST_API_VERSION/meta \
+          http://localhost:9090/apis/registry/v2/groups/acmeapis/artifacts/productsapi/versions/${{ steps.artifact-version.outputs.ARTIFACT_VERSION }}/meta \
           --header "Content-Type: application/json" \
           --data '{"labels": ["passed-conformance-test"] }' \
           --fail-with-body
