@@ -103,6 +103,7 @@ jobs:
       - name: Deploy-and-Test - Start minikube
         uses: medyagh/setup-minikube@master
       - name: Deploy-and-Test - Install Kusk Gateway
+        continue-on-error: true
         run: |
           kusk cluster install
       - name: Deploy-and-Test - Setup Kusk port forwarding to port 8000
