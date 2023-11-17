@@ -19,10 +19,14 @@ jobs:
       - name: Build - Start background services
         run: |
           docker compose -f chapter9/compose.yaml up -d
-      - name: Install Kusk
+      - name: Install Kusk CLI
         run: |
           curl -sSLf https://raw.githubusercontent.com/kubeshop/kusk-gateway/main/cmd/kusk/scripts/install.sh | bash
       - name: Start minikube
         uses: medyagh/setup-minikube@master
       - name: Try the cluster !
         run: kubectl get pods -A
+      - name: Install Kusk Gateway
+        run: |
+          kusk cluster install
+          kusk ip
