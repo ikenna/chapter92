@@ -97,18 +97,18 @@ jobs:
           mvn --batch-mode deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Deploy-and-Test - Install Kusk CLI
+      - name: [Deploy-and-Test] Install Kusk CLI
         run: |
           curl -sSLf https://raw.githubusercontent.com/kubeshop/kusk-gateway/main/cmd/kusk/scripts/install.sh | bash
-      - name: Deploy-and-Test - Start minikube
+      - name: [Deploy-and-Test] Start minikube
         uses: medyagh/setup-minikube@master
-      - name: Deploy-and-Test - Install Kusk Gateway
+      - name: [Deploy-and-Test] Install Kusk Gateway
         continue-on-error: true
         run: |
           kusk cluster install
-      - name: Deploy-and-Test - Setup Kusk port forwarding to port 8000
+      - name: [Deploy-and-Test] Setup Kusk port forwarding to port 8000
         run: |
-          kubectl port-forward svc/kusk-gateway-envoy-fleet -n kusk-system 8000:80
+          kubectl port-forward svc/kusk-gateway-envoy-fleet -n kusk-system 8000:80 &
       - name: Deploy Products API service
         run: |
           perl -pi -e "s/APP_VERSION/$GITHUB_RUN_NUMBER/g" chapter9/product-api-deployment.yaml
