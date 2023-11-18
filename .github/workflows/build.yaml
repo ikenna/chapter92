@@ -129,10 +129,7 @@ jobs:
           kusk deploy --in  http://localhost:9090/apis/registry/v2/groups/acmeapis/artifacts/productsapi/versions/${{ steps.artifact-version.outputs.ARTIFACT_VERSION }}
       - name: Check status of the cluster
         run: |
-          echo "POD_NAME=$(kubectl get pods -o=jsonpath='{.items[0].metadata.name}')" >> $GITHUB_ENV 
-          echo "POD_NAME=$POD_NAME"
-          kubectl wait --for=condition=Ready pod/$POD_NAME --timeout=60s
-          kubectl logs $POD_NAME --tail=20
+          ./chapter9/check_cluster_status.sh
       - name: Run API conformance tests
         run: |
           cd chapter9
