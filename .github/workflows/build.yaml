@@ -93,7 +93,8 @@ jobs:
           --additional-properties=invokerPackage=com.acmepetsupplies.client,apiPackage=com.acmepetsupplies.api,modelPackage=com.acmepetsupplies.model,groupId=com.acmepetsupplies,artifactId=acmepetsupplies-java-client,artifactVersion=1.0.0-SNAPSHOT
       - name: Build - Publish SDK to GitHub Packages
         run: |
-          sed -i "s/GITHUB_REPO/${{ github.repository }}/g" chapter8/java-template/libraries/okhttp-gson/pom.mustache
+          sed -i "s/OWNER/${{ github.repository_owner }}/g" chapter8/java-template/libraries/okhttp-gson/pom.mustache
+          sed -i "s/REPO_NAME/${{ github.event.repository.name }}/g" chapter8/java-template/libraries/okhttp-gson/pom.mustache
           tail -8  chapter8/java-template/libraries/okhttp-gson/pom.mustache
           cd build-output/java-client
           mvn --batch-mode deploy
@@ -115,11 +116,11 @@ jobs:
           nohup kubectl port-forward svc/kusk-gateway-envoy-fleet -n kusk-system 8000:80 &
       - name: Create GitHub Container Registry secret
         run: |
-          kubectl create secret docker-registry ghcr-secret --docker-server=https://ghcr.io --docker-username=${{ github.actor }} --docker-password=${{ secrets.GITHUB_TOKEN }} --docker-email=${{ github.actor }}
+          kubectl create secret docker-registry ghcr-secret --docker-server=https://ghcr.io --docker-username=${{ github.repository_owner }} --docker-password=${{ secrets.GITHUB_TOKEN }} --docker-email=${{ github.repository_owner }}
       - name: Deploy Products API service
         run: |
           sed -i "s/APP_VERSION/$GITHUB_RUN_NUMBER/g" chapter9/product-api-deployment.yaml
-          sed -i "s/OWNER/${{ github.actor }}/g" chapter9/product-api-deployment.yaml
+          sed -i "s/OWNER/${{ github.repository_owner }}/g" chapter9/product-api-deployment.yaml
           cat chapter9/product-api-deployment.yaml
           kubectl apply --filename chapter9/product-api-deployment.yaml
           kubectl apply --filename chapter9/product-api-service.yaml
