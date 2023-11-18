@@ -126,9 +126,9 @@ jobs:
           kusk deploy --in  http://localhost:9090/apis/registry/v2/groups/acmeapis/artifacts/productsapi/versions/${{ steps.artifact-version.outputs.ARTIFACT_VERSION }}
       - name: Check status of the cluster
         run: |
+          kubectl get services
+          kubectl get deployments
           kubectl get pods
-          kubectl describe pods
-          kubectl get events
           kubectl logs deployment/product-api  --tail=20
       - name: Run API conformance tests
         run: |
