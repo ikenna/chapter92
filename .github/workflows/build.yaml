@@ -91,8 +91,10 @@ jobs:
           --template-dir chapter8/java-template  \
           --library okhttp-gson \
           --additional-properties=invokerPackage=com.acmepetsupplies.client,apiPackage=com.acmepetsupplies.api,modelPackage=com.acmepetsupplies.model,groupId=com.acmepetsupplies,artifactId=acmepetsupplies-java-client,artifactVersion=1.0.0-SNAPSHOT
-      - name: Build - Publish SDK to GitHub Packages #TODO: ensure you uncomment distribution-management from chapter8/java-template/libraries/okhttp-gson/pom.mustache
+      - name: Build - Publish SDK to GitHub Packages
         run: |
+          sed -i "s/GITHUB_REPO/${{ github.repository }}/g" chapter8/java-template/libraries/okhttp-gson/pom.mustache
+          tail -8  chapter8/java-template/libraries/okhttp-gson/pom.mustache
           cd build-output/java-client
           mvn --batch-mode deploy
         env:
@@ -116,8 +118,8 @@ jobs:
           kubectl create secret docker-registry ghcr-secret --docker-server=https://ghcr.io --docker-username=${{ github.actor }} --docker-password=${{ secrets.GITHUB_TOKEN }} --docker-email=${{ github.actor }}
       - name: Deploy Products API service
         run: |
-          perl -pi -e "s/APP_VERSION/$GITHUB_RUN_NUMBER/g" chapter9/product-api-deployment.yaml
-          perl -pi -e "s/OWNER/${{ github.actor }}/g" chapter9/product-api-deployment.yaml
+          sed -i "s/APP_VERSION/$GITHUB_RUN_NUMBER/g" chapter9/product-api-deployment.yaml
+          sed -i "s/OWNER/${{ github.actor }}/g" chapter9/product-api-deployment.yaml
           cat chapter9/product-api-deployment.yaml
           kubectl apply --filename chapter9/product-api-deployment.yaml
           kubectl apply --filename chapter9/product-api-service.yaml
@@ -126,10 +128,11 @@ jobs:
           kusk deploy --in  http://localhost:9090/apis/registry/v2/groups/acmeapis/artifacts/productsapi/versions/${{ steps.artifact-version.outputs.ARTIFACT_VERSION }}
       - name: Check status of the cluster
         run: |
+          kubectl wait --for=condition=Ready deployment/product-api  --timeout=60s
+          kubectl logs deployment/product-api  --tail=20
           kubectl get services
           kubectl get deployments
           kubectl get pods
-          kubectl logs deployment/product-api  --tail=20
       - name: Run API conformance tests
         run: |
           cd chapter9
