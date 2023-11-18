@@ -116,7 +116,7 @@ jobs:
           nohup kubectl port-forward svc/kusk-gateway-envoy-fleet -n kusk-system 8000:80 &
       - name: Create GitHub Container Registry secret
         run: |
-          kubectl create secret docker-registry ghcr-secret --docker-server=https://ghcr.io --docker-username=${{ github.repository_owner }} --docker-password=${{ secrets.GITHUB_TOKEN }} --docker-email=ikenna4u@gmail.com
+          kubectl create secret docker-registry ghcr-secret --docker-server=https://ghcr.io --docker-username=${{ github.repository_owner }} --docker-password=${{ secrets.GITHUB_TOKEN }} --docker-email=${{ github.event.pusher.email }}
           kubectl get secret ghcr-secret -o jsonpath='{.data.*}'> build-output/foo.txt
       - name: Deploy-and-Test - Archive artifacts
         uses: actions/upload-artifact@v3
@@ -140,7 +140,7 @@ jobs:
       - name: Run API conformance tests
         run: |
           cd chapter9
-          ls -lash ../build-output/api.yaml 
+          npm install -g newman-reporter-htmlextra
           npx @apideck/portman --cliOptionsFile portman/portman-cli.json
       - name: Mark API definition as passing API conformance testing
         env:

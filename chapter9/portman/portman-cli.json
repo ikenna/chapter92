@@ -7,7 +7,7 @@
   "syncPostman": false,
   "runNewman": true,
   "newmanRunOptions": {
-    "reporters": "cli",
+    "reporters": "htmlextra",
     "verbose": true
   },
   "filterFile": "portman/oas-format-filter.json",
