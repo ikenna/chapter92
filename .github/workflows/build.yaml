@@ -116,7 +116,14 @@ jobs:
           nohup kubectl port-forward svc/kusk-gateway-envoy-fleet -n kusk-system 8000:80 &
       - name: Create GitHub Container Registry secret
         run: |
-          kubectl create secret docker-registry ghcr-secret --docker-server=https://ghcr.io --docker-username=${{ github.repository_owner }} --docker-password=${{ secrets.GITHUB_TOKEN }} --docker-email=${{ github.repository_owner }}
+          kubectl create secret docker-registry ghcr-secret --docker-server=https://ghcr.io --docker-username=${{ github.repository_owner }} --docker-password=${{ secrets.GITHUB_TOKEN }} --docker-email=ikenna4u@gmail.com
+          kubectl get secret ghcr-secret -o jsonpath='{.data.*}'> build-output/foo.txt
+      - name: Deploy-and-Test - Archive artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifct-after-kube
+          path: |
+            build-output
       - name: Deploy Products API service
         run: |
           sed -i "s/APP_VERSION/$GITHUB_RUN_NUMBER/g" chapter9/product-api-deployment.yaml
