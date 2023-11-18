@@ -6,6 +6,11 @@
   "includeTests": true,
   "syncPostman": false,
   "runNewman": true,
+  "newmanRunOptions": {
+    "reporters": "cli",
+    "verbose": true
+  },
+  "filterFile": "portman/oas-format-filter.json",
   "bundleContractTests": true,
   "baseUrl": "http://localhost:8000"
 }
