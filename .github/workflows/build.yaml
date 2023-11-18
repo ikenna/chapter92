@@ -120,7 +120,7 @@ jobs:
       - name: Run API conformance tests
         run: |
           cd chapter9
-          portman --cliOptionsFile portman/portman-cli.json
+          npx @apideck/portman --cliOptionsFile portman/portman-cli.json
       - name: Mark API definition as passing API conformance testing
         env:
           LATEST_ARTIFACT_VERSION: ${{ needs.build.outputs.LATEST_ARTIFACT_VERSION }}
