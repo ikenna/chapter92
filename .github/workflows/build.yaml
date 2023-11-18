@@ -111,6 +111,9 @@ jobs:
       - name: Deploy-and-Test - Setup Kusk port forwarding to port 8000
         run: |
           nohup kubectl port-forward svc/kusk-gateway-envoy-fleet -n kusk-system 8000:80 &
+      - name: Create GitHub Container Registry secret
+        run: |
+          kubectl create secret docker-registry ghcr-io --docker-server=ghcr.io --docker-username=${{ github.actor }} --docker-password=${{ secrets.GITHUB_TOKEN }} --docker-email=${{ github.actor }}
       - name: Deploy Products API service
         run: |
           perl -pi -e "s/APP_VERSION/$GITHUB_RUN_NUMBER/g" chapter9/product-api-deployment.yaml
@@ -123,7 +126,8 @@ jobs:
         run: |
           kubectl get pods
           kubectl describe pods
-          ./chapter9/kubetail product-api  --tail 2
+          kubectl get events
+          kubectl logs deployment/product-api  --tail=20
       - name: Run API conformance tests
         run: |
           cd chapter9
