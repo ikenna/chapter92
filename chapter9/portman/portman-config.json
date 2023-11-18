@@ -3,7 +3,7 @@
   "tests": {
     "contractTests": [
       {
-        "openApiOperation": "*::*",
+        "openApiOperation": "GET::/v1/catalog/products/{productId}",
         "statusSuccess": {
           "enabled": true
         },
