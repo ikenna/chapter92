@@ -1,5 +1,5 @@
 {
-  "local": "build-output/api.yaml",
+  "local": "../build-output/api.yaml",
   "output": "collection.postman.json",
   "envFile": "portman/.env-portman",
   "portmanConfigFile": "portman/portman-config.json",

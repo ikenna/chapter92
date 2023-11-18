@@ -120,6 +120,7 @@ jobs:
       - name: Run API conformance tests
         run: |
           cd chapter9
+          ls -lash ../build-output/api.yaml 
           npx @apideck/portman --cliOptionsFile portman/portman-cli.json
       - name: Mark API definition as passing API conformance testing
         env:
