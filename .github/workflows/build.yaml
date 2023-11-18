@@ -93,10 +93,11 @@ jobs:
           --additional-properties=invokerPackage=com.acmepetsupplies.client,apiPackage=com.acmepetsupplies.api,modelPackage=com.acmepetsupplies.model,groupId=com.acmepetsupplies,artifactId=acmepetsupplies-java-client,artifactVersion=1.0.0-SNAPSHOT
       - name: Build - Publish SDK to GitHub Packages
         run: |
-          sed -i "s/OWNER/${{ github.repository_owner }}/g" chapter8/java-template/libraries/okhttp-gson/pom.mustache
-          sed -i "s/REPO_NAME/${{ github.event.repository.name }}/g" chapter8/java-template/libraries/okhttp-gson/pom.mustache
-          tail -8  chapter8/java-template/libraries/okhttp-gson/pom.mustache
           cd build-output/java-client
+          ls -lash
+          sed -i "s/OWNER/${{ github.repository_owner }}/g" java-template/libraries/okhttp-gson/pom.mustache
+          sed -i "s/REPO_NAME/${{ github.event.repository.name }}/g" java-template/libraries/okhttp-gson/pom.mustache
+          tail -8  java-template/libraries/okhttp-gson/pom.mustache
           mvn --batch-mode deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
