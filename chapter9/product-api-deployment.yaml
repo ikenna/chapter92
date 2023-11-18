@@ -16,7 +16,7 @@ spec:
         app: product-api
     spec:
       containers:
-        - image: ghcr.io/OWNER/products-api-service:APP_VERSION
+        - image: ghcr.io/OWNER/products-api-service3:APP_VERSION
           name: products-api-service
           resources: {}
       imagePullSecrets:
