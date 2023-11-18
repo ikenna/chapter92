@@ -130,6 +130,9 @@ jobs:
       - name: Check status of the cluster
         run: |
           kubectl get pods
+          echo "POD_NAME=$(kubectl get pods -o=jsonpath='{.items[0].metadata.name}')" >> $GITHUB_ENV 
+          kubectl wait --for=condition=Ready pod/$POD_NAME --timeout=60s
+          kubectl logs $POD_NAME --tail=20
       - name: Run API conformance tests
         run: |
           cd chapter9
