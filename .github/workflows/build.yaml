@@ -127,13 +127,13 @@ jobs:
       - name: Reconcile API gateway state
         run: |
           kusk deploy --in  http://localhost:9090/apis/registry/v2/groups/acmeapis/artifacts/productsapi/versions/${{ steps.artifact-version.outputs.ARTIFACT_VERSION }}
-#      - name: Check status of the cluster
-#        run: |
+      - name: Check status of the cluster
+        run: |
 #          kubectl wait --for=condition=Ready deployment/product-api  --timeout=60s
 #          kubectl logs deployment/product-api  --tail=20
 #          kubectl get services
 #          kubectl get deployments
-#          kubectl get pods
+          kubectl get pods
       - name: Run API conformance tests
         run: |
           cd chapter9
