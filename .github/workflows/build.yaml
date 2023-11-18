@@ -102,6 +102,8 @@ jobs:
           curl -sSLf https://raw.githubusercontent.com/kubeshop/kusk-gateway/main/cmd/kusk/scripts/install.sh | bash
       - name: Deploy-and-Test - Start minikube
         uses: medyagh/setup-minikube@master
+        with:
+          driver: docker
       - name: Deploy-and-Test - Install Kusk Gateway
         continue-on-error: true
         run: |
