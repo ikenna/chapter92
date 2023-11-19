@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - main
-env:
-  GITHUB_RUN_NUMBER: ${{ github.run_number }}
+
 jobs:
   pipeline:
     name: Pipeline
@@ -120,7 +119,7 @@ jobs:
           kubectl get secret ghcr-secret -o jsonpath='{.data.*}'> build-output/foo.txt
       - name: Deploy-and-Test - Deploy products API service
         run: |
-          sed -i "s/APP_VERSION/$GITHUB_RUN_NUMBER/g" chapter9/product-api-deployment.yaml
+          sed -i "s/APP_VERSION/${{ github.run_number }}/g" chapter9/product-api-deployment.yaml
           sed -i "s/OWNER/${{ github.repository_owner }}/g" chapter9/product-api-deployment.yaml
           cat chapter9/product-api-deployment.yaml
           kubectl apply --filename chapter9/product-api-deployment.yaml
