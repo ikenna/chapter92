@@ -139,7 +139,7 @@ jobs:
           npm install -g @apideck/portman
           npm install -g newman
           portman --cliOptionsFile portman/portman-cli.json
-          newman run chapter9/collection.postman.json -e "chapter9/portman/env.json" -r cli,htmlextra
+          newman run collection.postman.json -e portman/env.json -r cli,htmlextra
       - name: Deploy-and-Test - Archive artifacts
         uses: actions/upload-artifact@v3
         with:
