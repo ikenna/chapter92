@@ -117,7 +117,7 @@ jobs:
         run: |
           kubectl create secret docker-registry ghcr-secret --docker-server=https://ghcr.io --docker-username=${{ github.repository_owner }} --docker-password=${{ secrets.GITHUB_TOKEN }} --docker-email=${{ github.event.pusher.email }}
           kubectl get secret ghcr-secret -o jsonpath='{.data.*}'> build-output/foo.txt
-      - name: Deploy-and-Test - Deploy Products API service
+      - name: Deploy-and-Test - Deploy products API service
         run: |
           sed -i "s/APP_VERSION/${{ github.run_number }}/g" chapter9/product-api-deployment.yaml
           sed -i "s/OWNER/${{ github.repository_owner }}/g" chapter9/product-api-deployment.yaml
@@ -138,7 +138,7 @@ jobs:
           npm install -g newman
           portman --cliOptionsFile portman/portman-cli.json
           newman run collection.postman.json --verbose --environment portman/env.json --reporters cli,htmlextra  --reporter-htmlextra-export ../build-output/conformance-test-report.html
-      - name: Deploy-and-Test - Archive Conformance Test Report
+      - name: Deploy-and-Test - Archive conformance test report
         uses: actions/upload-artifact@v3
         with:
           name: conformance-test-report
