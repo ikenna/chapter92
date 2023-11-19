@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Build - Checkout
         uses: actions/checkout@v3
-      - name: Build - Start background services
+      - name: Build - Start background services (Kong gateway and Apicurio API registry)
         run: |
           docker compose -f chapter9/compose.yaml up -d
       - name: Build - Set up JDK 17
@@ -32,7 +32,7 @@ jobs:
         run: |
           cd chapter8
           ./run_app_build.sh
-      - name: Build - Log in to the GitHub Container registry
+      - name: Build - Log in to the GitHub Container Registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
           registry: ghcr.io
@@ -133,8 +133,8 @@ jobs:
       - name: Deploy-and-Test - Run API conformance tests
         run: |
           cd chapter9
-          npm install -g newman-reporter-htmlextra
           npm install -g @apideck/portman
+          npm install -g newman-reporter-htmlextra
           npm install -g newman
           portman --cliOptionsFile portman/portman-cli.json
           newman run collection.postman.json --verbose --environment portman/env.json --reporters cli,htmlextra  --reporter-htmlextra-export ../build-output/conformance-test-report.html
