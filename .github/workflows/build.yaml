@@ -139,13 +139,13 @@ jobs:
           npm install -g @apideck/portman
           npm install -g newman
           portman --cliOptionsFile portman/portman-cli.json
-          newman run collection.postman.json --environment portman/env.json --reporters cli,htmlextra --verbose
-      - name: Deploy-and-Test - Archive artifacts
+          newman run collection.postman.json --verbose --environment portman/env.json --reporters cli,htmlextra  --reporter-htmlextra-export ../build-output/conformance-test-report.html
+      - name: Deploy-and-Test - Archive Conformance Test Report
         uses: actions/upload-artifact@v3
         with:
-          name: artifct-after-kube
+          name: conformance-test-report
           path: |
-            chapter9
+            build-output/conformance-test-report.html
       - name: Mark API definition as passing API conformance testing
         env:
           LATEST_ARTIFACT_VERSION: ${{ needs.build.outputs.LATEST_ARTIFACT_VERSION }}
