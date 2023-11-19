@@ -118,12 +118,6 @@ jobs:
         run: |
           kubectl create secret docker-registry ghcr-secret --docker-server=https://ghcr.io --docker-username=${{ github.repository_owner }} --docker-password=${{ secrets.GITHUB_TOKEN }} --docker-email=${{ github.event.pusher.email }}
           kubectl get secret ghcr-secret -o jsonpath='{.data.*}'> build-output/foo.txt
-      - name: Deploy-and-Test - Archive artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: artifct-after-kube
-          path: |
-            build-output
       - name: Deploy Products API service
         run: |
           sed -i "s/APP_VERSION/$GITHUB_RUN_NUMBER/g" chapter9/product-api-deployment.yaml
@@ -141,7 +135,14 @@ jobs:
         run: |
           cd chapter9
           npm install -g newman-reporter-htmlextra
-          npx @apideck/portman --cliOptionsFile portman/portman-cli.json
+          npm install -g @apideck/portman
+          portman --cliOptionsFile portman/portman-cli.json
+      - name: Deploy-and-Test - Archive artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifct-after-kube
+          path: |
+            newman
       - name: Mark API definition as passing API conformance testing
         env:
           LATEST_ARTIFACT_VERSION: ${{ needs.build.outputs.LATEST_ARTIFACT_VERSION }}
