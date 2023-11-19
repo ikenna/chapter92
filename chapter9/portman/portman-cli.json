@@ -5,12 +5,7 @@
   "portmanConfigFile": "portman/portman-config.json",
   "includeTests": true,
   "syncPostman": false,
-  "runNewman": true,
-  "newmanRunOptions": {
-    "reporters": ["cli","htmlextra"],
-    "verbose": true,
-    "reporter-htmlextra-export": "build-output/newman-report.html"
-  },
+  "runNewman": false,
   "filterFile": "portman/oas-format-filter.json",
   "bundleContractTests": true,
   "baseUrl": "http://localhost:8000"
