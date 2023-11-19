@@ -1,5 +1,5 @@
 {
-  "local": "../build-output/api.yaml",
+  "local": "../api.yaml",
   "output": "collection.postman.json",
   "envFile": "portman/.env-portman",
   "portmanConfigFile": "portman/portman-config.json",
@@ -7,8 +7,9 @@
   "syncPostman": false,
   "runNewman": true,
   "newmanRunOptions": {
-    "reporters": "htmlextra",
-    "verbose": true
+    "reporters": ["cli","htmlextra"],
+    "verbose": true,
+    "reporter-htmlextra-export": "build-output/newman-report.html"
   },
   "filterFile": "portman/oas-format-filter.json",
   "bundleContractTests": true,
