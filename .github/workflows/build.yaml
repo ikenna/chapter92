@@ -113,7 +113,7 @@ jobs:
           kusk cluster install
       - name: Deploy-and-Test - Setup Kusk port forwarding to port 8000
         run: |
-          nohup kubectl port-forward svc/kusk-gateway-envoy-fleet -n kusk-system 8000:80 &
+          nohup kubectl port-forward svc/kusk-gateway-envoy-fleet -n kusk-system 9000:80 &
       - name: Create GitHub Container Registry secret
         run: |
           kubectl create secret docker-registry ghcr-secret --docker-server=https://ghcr.io --docker-username=${{ github.repository_owner }} --docker-password=${{ secrets.GITHUB_TOKEN }} --docker-email=${{ github.event.pusher.email }}
@@ -139,7 +139,7 @@ jobs:
           npm install -g @apideck/portman
           npm install -g newman
           portman --cliOptionsFile portman/portman-cli.json
-          newman run collection.postman.json -e portman/env.json -r cli,htmlextra
+          newman run collection.postman.json --environment portman/env.json --reporters cli,htmlextra --verbose
       - name: Deploy-and-Test - Archive artifacts
         uses: actions/upload-artifact@v3
         with:
