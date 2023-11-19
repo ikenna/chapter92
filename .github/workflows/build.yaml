@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main
-
+env:
+  GITHUB_RUN_NUMBER: ${{ github.run_number }}
 jobs:
   pipeline:
     name: Pipeline
