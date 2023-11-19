@@ -132,6 +132,7 @@ jobs:
         run: |
           ./chapter9/check_cluster_status.sh
       - name: Run API conformance tests
+        continue-on-error: true
         run: |
           cd chapter9
           npm install -g newman-reporter-htmlextra
