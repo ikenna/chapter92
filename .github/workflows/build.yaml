@@ -143,7 +143,7 @@ jobs:
         with:
           name: artifct-after-kube
           path: |
-            newman
+            chapter9/newman
       - name: Mark API definition as passing API conformance testing
         env:
           LATEST_ARTIFACT_VERSION: ${{ needs.build.outputs.LATEST_ARTIFACT_VERSION }}
