@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Build - Checkout
         uses: actions/checkout@v3
-      - name: Build - Start background services
+      - name: Build - Start background services (Kong gateway and Apicurio API registry)
         run: |
           docker compose -f chapter9/compose.yaml up -d
       - name: Build - Set up JDK 17
@@ -37,15 +37,15 @@ jobs:
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build - Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
-         context: .
-         push: true
-         tags: ghcr.io/OWNER/products-api-service3:${{ github.run_number }}
-         file: chapter8/Dockerfile
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/products-api-service:${{ github.run_number }}
+          file: chapter8/Dockerfile
       - name: Build - Create output directory for API artifacts
         run: mkdir build-output
       - name: Build - Bundle API definition file
@@ -83,6 +83,9 @@ jobs:
           echo "ARTIFACT_VERSION=$(cat created-artifact.json | jq -j '.version')"  >> $GITHUB_OUTPUT
       - name: Build - Generate Java SDK
         run: |
+          sed -i "s/OWNER/${{ github.repository_owner }}/g" chapter8/java-template/libraries/okhttp-gson/pom.mustache
+          sed -i "s/REPO_NAME/${{ github.event.repository.name }}/g" chapter8/java-template/libraries/okhttp-gson/pom.mustache
+          tail -8  chapter8/java-template/libraries/okhttp-gson/pom.mustache
           npm install -g @openapitools/openapi-generator-cli
           openapi-generator-cli generate \
           --input-spec build-output/api.yaml  \
@@ -91,7 +94,7 @@ jobs:
           --template-dir chapter8/java-template  \
           --library okhttp-gson \
           --additional-properties=invokerPackage=com.acmepetsupplies.client,apiPackage=com.acmepetsupplies.api,modelPackage=com.acmepetsupplies.model,groupId=com.acmepetsupplies,artifactId=acmepetsupplies-java-client,artifactVersion=1.0.0-SNAPSHOT
-      - name: Build - Publish SDK to GitHub Packages #TODO: ensure you uncomment distribution-management from chapter8/java-template/libraries/okhttp-gson/pom.mustache
+      - name: Build - Publish SDK to GitHub Packages
         run: |
           cd build-output/java-client
           mvn --batch-mode deploy
@@ -105,7 +108,9 @@ jobs:
           deck version
       - name: Deploy-and-Test - Deploy Products API service
         run: |
-           docker compose -f chapter9/compose-api-service.yaml up -d
+          sed -i "s/OWNER/${{ github.repository_owner }}/g" chapter9/compose-api-service.yaml
+          cat chapter9/compose-api-service.yaml
+          docker compose -f chapter9/compose-api-service.yaml up -d
       - name: Deploy-and-Test - Reconcile API gateway state
         run: |
           deck validate --state chapter9/kong.yaml
